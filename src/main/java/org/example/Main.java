@@ -6,34 +6,19 @@ import java.net.Socket;
 import static java.lang.Thread.sleep;
 
 public class Main {
-    private static Socket socket1;
-    private static ObjectInputStream in;
-    private static ObjectOutputStream out;
+    private static String HOST = "localhost";
+    private static int PORT = 8081;
 
-    public static void main(String[] args) {
-        try {
-            try {
-                System.out.println("старт клиента...");
-                socket1 = new Socket("localhost", 4004);
-                while (true) {
-                    in = new ObjectInputStream(socket1.getInputStream());
-                    out = new ObjectOutputStream(socket1.getOutputStream());
-                    sleep(5000);
-                    out.writeObject("Hello");
-                    out.flush();
+    public static void main(String[] args) throws Exception {
+        Socket socket = new Socket(HOST, PORT);
 
-                }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } finally {
-                System.out.println("Клиент был закрыт...");
-                socket1.close();
-                in.close();
-                out.close();
-            }
-        } catch (IOException e) {
-            System.err.println(e);
-        }
+        PrintWriter out = new PrintWriter(socket.getOutputStream());
+        out.println("Hello");
+        out.println("World");
+        out.println("How are you?");
 
+
+        out.close();
+        socket.close();
     }
 }
